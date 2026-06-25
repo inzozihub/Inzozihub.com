@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>InzoziHub</title>
+  <title>Super Trading Web | InzoziHub</title>
   <link rel="icon" href="IMG_0002.PNG">
   <style>
-    /* ===== FORCE STICKY HEADER - NO CONFLICTS ===== */
-    
-    /* RESET EVERYTHING */
+    /* ========== RESET & BASE ========== */
     * {
       margin: 0;
       padding: 0;
@@ -19,8 +17,8 @@
       overflow-x: hidden;
       width: 100%;
       max-width: 100%;
-      margin: 0;
-      padding: 0;
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
     body {
@@ -28,34 +26,44 @@
       color: #ffffff;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
       line-height: 1.5;
-      min-height: 200vh; /* Forces scrolling to test */
-      padding-top: 0;
-    }
-
-    /* ===== STICKY HEADER - FORCED ===== */
-    .glass-header {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      z-index: 99999 !important;
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      padding: 1rem 2rem !important;
-      background: rgba(5, 7, 15, 0.95) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border-bottom: 2px solid rgba(56, 189, 248, 0.4) !important;
-      width: 100% !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+      scroll-behavior: smooth;
+      min-height: 100vh;
       margin: 0 !important;
+      padding: 0 !important;
     }
 
-    /* Push content down so it's not hidden behind fixed header */
-    .content-wrapper {
-      margin-top: 80px;
-      padding: 0 15px;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    :root {
+      --bg-deep: #05070f;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.25);
+      --text-muted: #b9c3db;
+      --transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      --profit-green: #00ff88;
+      --loss-red: #ff4466;
+      --gold: #facc15;
+    }
+
+    /* ========== STICKY HEADER ========== */
+    .glass-header {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(5, 7, 15, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 2px solid rgba(56, 189, 248, 0.4);
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      margin: 0 !important;
     }
 
     .brand {
@@ -83,23 +91,48 @@
       color: #b9c3db;
       text-decoration: none;
       font-weight: 500;
+      transition: var(--transition);
       font-size: 0.9rem;
-      transition: 0.3s;
     }
     .nav-links a:hover {
       color: #38bdf8;
+      text-shadow: 0 0 6px rgba(56, 189, 248, 0.25);
     }
 
-    /* ===== TEST CONTENT ===== */
+    /* ========== CONTENT WRAPPER ========== */
+    .content-wrapper {
+      padding: 0 15px;
+      max-width: 100%;
+    }
+
+    /* ========== HERO SECTION - TRADING THEME ========== */
     .hero-section {
       text-align: center;
       padding: 4rem 2rem 2.5rem;
       border-bottom: 1px solid rgba(56,189,248,0.2);
     }
+    .hero-badge {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 60px;
+      display: inline-block;
+      padding: 0.3rem 1.2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      backdrop-filter: blur(4px);
+    }
     .hero-section h1 {
       font-size: 3.6rem;
       font-weight: 800;
       background: linear-gradient(125deg, #ffffff, #7ac9ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+    .hero-section h1 .highlight {
+      background: linear-gradient(125deg, #00ff88, #38bdf8);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -111,46 +144,1001 @@
       font-size: 1.05rem;
     }
 
-    .spacer {
-      height: 2000px;
-      background: linear-gradient(to bottom, transparent, rgba(56,189,248,0.05));
-      padding: 40px;
+    /* ========== LIVE MARKET TICKER ========== */
+    .market-ticker {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid #2a344d;
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin: 20px auto;
+      max-width: 900px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 15px;
+      backdrop-filter: blur(10px);
+    }
+    .ticker-item {
       text-align: center;
     }
-
-    .spacer p {
+    .ticker-item .symbol {
+      font-size: 0.7rem;
       color: #6a7894;
+      text-transform: uppercase;
+    }
+    .ticker-item .price {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .ticker-item .change {
+      font-size: 0.75rem;
+    }
+    .ticker-item .change.up {
+      color: var(--profit-green);
+    }
+    .ticker-item .change.down {
+      color: var(--loss-red);
+    }
+
+    /* ========== MAIN LAYOUT WITH SIDEBAR ========== */
+    .main-layout {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .left-content {
+      flex-shrink: 0;
+      width: 900px;
+      max-width: 100%;
+    }
+
+    .right-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      margin-top: 145px;
+    }
+
+    /* ========== SIDEBAR - TRADING ADS ========== */
+    .sidebar-card {
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #2a344d;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      color: #38bdf8;
+      border-left: 3px solid #38bdf8;
+      padding-left: 8px;
+    }
+
+    .sidebar-card .ad-banner {
+      background: linear-gradient(135deg, #1a2a3a, #0a1a2a);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #38bdf8;
+      margin-bottom: 10px;
+    }
+    .sidebar-card .ad-banner .ad-title {
       font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .sidebar-card .ad-banner .ad-sub {
+      font-size: 0.75rem;
+      color: #b9c3db;
+      margin: 8px 0;
+    }
+    .sidebar-card .ad-banner .ad-btn {
+      display: inline-block;
+      background: #38bdf8;
+      color: #000;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+    .sidebar-card .ad-banner .ad-btn:hover {
+      transform: scale(1.05);
+      background: #00ff88;
+    }
+
+    .mini-review {
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2a344d;
+    }
+    .mini-review span {
+      color: #facc15;
+      font-size: 0.7rem;
+    }
+    .mini-review p {
+      font-size: 0.75rem;
+      margin: 4px 0;
+      color: #b9c3db;
+    }
+    .mini-review small {
+      font-size: 0.6rem;
+      color: #6a7894;
+    }
+
+    .offer {
+      text-align: center;
+    }
+    .badge {
+      background: #facc15;
+      color: #000;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .social-icons a {
+      color: #b9c3db;
+      text-decoration: none;
+      font-size: 0.7rem;
+      padding: 5px 8px;
+      background: #1e293b;
+      border-radius: 20px;
+    }
+    .sidebar-card ul {
+      list-style: none;
+    }
+    .sidebar-card li {
+      margin-bottom: 8px;
+    }
+    .sidebar-card a {
+      color: #b9c3db;
+      text-decoration: none;
+      font-size: 0.75rem;
+    }
+    .sidebar-card a:hover {
+      color: #38bdf8;
+    }
+
+    /* ========== MAIN CONTAINER ========== */
+    .vertical-column {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      padding-left: 1rem;
+      border-left: 5px solid #38bdf8;
+      margin-bottom: 1rem;
+    }
+    .section-title .gold {
+      color: var(--gold);
+    }
+
+    .service-card {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(8px);
+      border-radius: 1.8rem;
+      border: 1px solid #2a344d;
+      overflow: hidden;
+      transition: var(--transition);
+      width: 100%;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: #38bdf8;
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.6);
+    }
+
+    .slideshow-container {
+      position: relative;
+      height: 520px;
+      background: #0a0e18;
+      overflow: hidden;
+    }
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.4s ease;
+    }
+    .slide-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      z-index: 10;
+      font-weight: bold;
+    }
+    .slide-btn:hover {
+      background: #38bdf8;
+      color: #000;
+    }
+    .prev-btn {
+      left: 12px;
+    }
+    .next-btn {
+      right: 12px;
+    }
+    .slide-dots {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .dot.active {
+      background: #38bdf8;
+      width: 20px;
+      border-radius: 10px;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+    .card-content h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-content p {
+      color: #b9c3db;
+      font-size: 0.95rem;
+      margin-bottom: 0;
+      line-height: 1.5;
+    }
+    .card-content .card-tag {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      margin-top: 8px;
+    }
+
+    /* ========== TRADING SIGNALS SECTION ========== */
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 15px 0;
+    }
+    .signal-card {
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid #2a344d;
+      border-radius: 16px;
+      padding: 15px;
+      transition: 0.3s;
+    }
+    .signal-card:hover {
+      border-color: var(--profit-green);
+      transform: translateY(-3px);
+    }
+    .signal-card .pair {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .signal-card .signal-type {
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 5px 0;
+    }
+    .signal-card .signal-type.buy {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--profit-green);
+    }
+    .signal-card .signal-type.sell {
+      background: rgba(255, 68, 102, 0.2);
+      color: var(--loss-red);
+    }
+    .signal-card .entry-price {
+      color: #b9c3db;
+      font-size: 0.85rem;
+    }
+    .signal-card .take-profit {
+      color: var(--profit-green);
+      font-size: 0.8rem;
+    }
+    .signal-card .stop-loss {
+      color: var(--loss-red);
+      font-size: 0.8rem;
+    }
+
+    /* ========== AD BANNERS ========== */
+    .ad-banner-large {
+      background: linear-gradient(135deg, #1a2a3a, #0a1a2a);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      border: 2px solid var(--gold);
+      margin: 20px 0;
+    }
+    .ad-banner-large h2 {
+      font-size: 2rem;
+      background: linear-gradient(125deg, var(--gold), #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .ad-banner-large p {
+      color: #b9c3db;
+      margin: 10px 0;
+    }
+    .ad-banner-large .btn-cta {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      padding: 12px 40px;
+      border-radius: 60px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+    .ad-banner-large .btn-cta:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
+    }
+
+    .soon-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .soon-item {
+      background: linear-gradient(145deg, #111b2a, #0a0f1c);
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.8rem;
+      border: 1px solid #2c3b54;
+      transition: 0.2s;
+      width: 100%;
+    }
+    .soon-item h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.2rem;
+    }
+    .soon-item p {
+      color: #38bdf8;
+      font-size: 0.8rem;
+    }
+    .soon-item:hover {
+      border-color: #38bdf8;
+      transform: translateX(5px);
+      background: #14212f;
+    }
+
+    /* ========== FOOTER ========== */
+    .site-footer {
+      background: rgba(5, 7, 15, 0.95);
+      border-top: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2.5rem 2rem 1.5rem;
+      margin-top: 2rem;
+      width: 100%;
+    }
+    .footer-container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .footer-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .footer-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(145deg, #1f2c3e, #0a0f1c);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+    .footer-logo-text {
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      background: linear-gradient(130deg, #fff, #8ed6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .footer-contact-info {
+      margin: 1.5rem 0;
+    }
+    .footer-contact-info p {
+      margin: 0.6rem 0;
+      color: #b9c3db;
+      font-size: 0.95rem;
+    }
+    .footer-contact-info a {
+      color: #38bdf8;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .footer-contact-info a:hover {
+      text-decoration: underline;
+      color: #7ac9ff;
+    }
+    .whatsapp-footer {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 700;
+      color: #000;
+      margin-top: 0.8rem;
+      transition: var(--transition);
+    }
+    .whatsapp-footer:hover {
+      transform: scale(1.02);
+      background: #20b859;
+    }
+    .footer-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1.5rem auto;
+      opacity: 0.5;
+    }
+    .copyright {
+      font-size: 0.7rem;
+      color: #6a7894;
+      margin-top: 1rem;
+    }
+
+    /* ========== LIGHTBOX ========== */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(14px);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      cursor: pointer;
+    }
+    .lightbox-inner {
+      background: #0e1322;
+      border-radius: 2rem;
+      padding: 1.5rem;
+      max-width: 650px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid #38bdf8;
+    }
+    .lightbox-inner img {
+      width: 100%;
+      border-radius: 1rem;
+      max-height: 450px;
+      object-fit: contain;
+      background: #05070f;
+    }
+
+    /* ========== MOBILE RESPONSIVE ========== */
+    @media (max-width: 1200px) {
+      .main-layout {
+        flex-direction: column;
+        align-items: center;
+      }
+      .right-sidebar {
+        width: 100%;
+        max-width: 900px;
+        margin-top: 20px;
+      }
+      .sidebar-card {
+        display: inline-block;
+        width: calc(33% - 14px);
+        margin-right: 20px;
+        vertical-align: top;
+      }
+      .sidebar-card:last-child {
+        margin-right: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .glass-header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0.8rem 1rem;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+      }
+      .hero-section h1 { 
+        font-size: 2.2rem; 
+      }
+      .brand-text { 
+        font-size: 1.1rem; 
+      }
+      .section-title { 
+        font-size: 1.5rem; 
+      }
+      .vertical-column { 
+        padding: 1rem 0; 
+      }
+      .card-content h3 { 
+        font-size: 1.2rem; 
+      }
+      .slideshow-container { 
+        height: 300px;
+      }
+      .sidebar-card {
+        width: 100%;
+        margin-right: 0;
+      }
+      .right-sidebar {
+        margin-top: 10px;
+      }
+      .main-layout {
+        padding: 0 10px;
+      }
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+      .market-ticker {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .ad-banner-large h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-section h1 {
+        font-size: 1.8rem;
+      }
+      .glass-header {
+        padding: 0.5rem 0.8rem;
+      }
+      .brand-text {
+        font-size: 0.9rem;
+      }
+      .nav-links a {
+        font-size: 0.7rem;
+      }
+      .slideshow-container {
+        height: 220px;
+      }
+      .card-content {
+        padding: 1rem;
+      }
+      .card-content h3 {
+        font-size: 1rem;
+      }
+      .card-content p {
+        font-size: 0.8rem;
+      }
+      .section-title {
+        font-size: 1.2rem;
+        padding-left: 0.5rem;
+      }
+      .sidebar-card {
+        padding: 10px;
+      }
+      .ad-banner-large {
+        padding: 20px;
+      }
+      .ad-banner-large h2 {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== STICKY HEADER ===== -->
+<!-- ===== HEADER (STICKY) ===== -->
 <header class="glass-header">
   <div class="brand">
-    <span class="brand-text">INZOZI HUB</span>
+    <img src="IMG_0002.PNG" alt="Inzozi Hub" style="width: 46px; height: 46px; border-radius: 16px; object-fit: cover; border: 1px solid #38bdf8;">
+    <span class="brand-text">SUPER TRADING</span>
   </div>
   <div class="nav-links">
-    <a href="#">Tech</a>
-    <a href="#">Coming</a>
-    <a href="#">Contact</a>
+    <a href="#signals">Signals</a>
+    <a href="#courses">Courses</a>
+    <a href="#coming">Coming</a>
+    <a href="#footer">Contact</a>
   </div>
 </header>
 
-<!-- ===== CONTENT ===== -->
+<!-- ===== CONTENT WRAPPER ===== -->
 <div class="content-wrapper">
+
+  <!-- ===== HERO ===== -->
   <div class="hero-section">
-    <h1>INNOVATE & ELEVATE</h1>
-    <p>Digital ecosystem — technology, fashion, commerce & entertainment.</p>
+    <div class="hero-badge">📈 Live Trading • 2026</div>
+    <h1>TRADE LIKE A <span class="highlight">PRO</span></h1>
+    <p>Super Trading Web — premium signals, expert analysis, and high-profit strategies. Start your journey to financial freedom today.</p>
   </div>
 
-  <div class="spacer">
-    <p>⬇️ SCROLL DOWN ⬇️</p>
-    <p style="margin-top: 40px; color: #38bdf8;">The header with "INZOZI HUB | Tech | Coming | Contact" stays at the top!</p>
-    <p style="margin-top: 20px; color: #6a7894; font-size: 0.9rem;">Keep scrolling... it's fixed at the top! 🚀</p>
+  <!-- ===== LIVE MARKET TICKER ===== -->
+  <div class="market-ticker">
+    <div class="ticker-item">
+      <div class="symbol">BTC/USD</div>
+      <div class="price">$67,842</div>
+      <div class="change up">▲ +2.4%</div>
+    </div>
+    <div class="ticker-item">
+      <div class="symbol">ETH/USD</div>
+      <div class="price">$3,521</div>
+      <div class="change up">▲ +1.8%</div>
+    </div>
+    <div class="ticker-item">
+      <div class="symbol">EUR/USD</div>
+      <div class="price">1.0892</div>
+      <div class="change down">▼ -0.3%</div>
+    </div>
+    <div class="ticker-item">
+      <div class="symbol">XAU/USD</div>
+      <div class="price">$2,415</div>
+      <div class="change up">▲ +0.7%</div>
+    </div>
+    <div class="ticker-item">
+      <div class="symbol">NASDAQ</div>
+      <div class="price">18,572</div>
+      <div class="change up">▲ +1.2%</div>
+    </div>
+  </div>
+
+  <!-- ===== AD BANNER ===== -->
+  <div class="ad-banner-large">
+    <span class="badge">🔥 LIMITED OFFER</span>
+    <h2>GET 50% OFF</h2>
+    <p>on all premium trading signals and courses. Use code: <strong style="color:var(--gold);">SUPER50</strong></p>
+    <a href="#" class="btn-cta">CLAIM NOW →</a>
+  </div>
+
+  <!-- ===== MAIN LAYOUT ===== -->
+  <div class="main-layout">
+    
+    <!-- ===== LEFT SIDE ===== -->
+    <div class="left-content">
+      <div class="vertical-column" id="signals">
+
+        <!-- ===== TRADING SIGNALS ===== -->
+        <div class="section-title">📊 Live <span class="gold">Trading Signals</span></div>
+        <div class="signal-grid">
+          <div class="signal-card">
+            <div class="pair">BTC/USD</div>
+            <div class="signal-type buy">BUY</div>
+            <div class="entry-price">Entry: $67,800</div>
+            <div class="take-profit">✅ Take Profit: $69,200</div>
+            <div class="stop-loss">⛔ Stop Loss: $66,500</div>
+          </div>
+          <div class="signal-card">
+            <div class="pair">ETH/USD</div>
+            <div class="signal-type buy">BUY</div>
+            <div class="entry-price">Entry: $3,510</div>
+            <div class="take-profit">✅ Take Profit: $3,650</div>
+            <div class="stop-loss">⛔ Stop Loss: $3,420</div>
+          </div>
+          <div class="signal-card">
+            <div class="pair">EUR/USD</div>
+            <div class="signal-type sell">SELL</div>
+            <div class="entry-price">Entry: 1.0895</div>
+            <div class="take-profit">✅ Take Profit: 1.0840</div>
+            <div class="stop-loss">⛔ Stop Loss: 1.0920</div>
+          </div>
+        </div>
+
+        <!-- ===== TRADING COURSES ===== -->
+        <div class="section-title" id="courses">🎓 <span class="gold">Trading Courses</span></div>
+
+        <div class="service-card">
+          <div class="slideshow-container" id="slideshow-web">
+            <img class="slide-img" src="IMG_0019.PNG" alt="Trading Course">
+            <button class="slide-btn prev-btn">‹</button>
+            <button class="slide-btn next-btn">›</button>
+            <div class="slide-dots"></div>
+          </div>
+          <div class="card-content">
+            <h3>📈 Forex Mastery</h3>
+            <p>Learn advanced forex trading strategies, risk management, and profit optimization from professional traders.</p>
+            <span class="card-tag">🔥 50% OFF</span>
+            <span class="card-tag">📊 12 Lessons</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="slideshow-container" id="slideshow-graphic">
+            <img class="slide-img" src="https://placehold.co/900x500/2d3748/ffffff?text=Crypto+Trading+Masterclass" alt="Crypto Course">
+            <button class="slide-btn prev-btn">‹</button>
+            <button class="slide-btn next-btn">›</button>
+            <div class="slide-dots"></div>
+          </div>
+          <div class="card-content">
+            <h3>₿ Crypto Masterclass</h3>
+            <p>Bitcoin, Ethereum, Altcoins — technical analysis, market psychology, and proven entry/exit strategies.</p>
+            <span class="card-tag">🚀 Beginners Welcome</span>
+          </div>
+        </div>
+
+        <!-- ===== COMING SOON ===== -->
+        <div class="section-title" id="coming">🚀 Coming <span class="gold">Soon</span></div>
+        <div class="soon-stack">
+          <div class="soon-item"><h3>📱 AI Trading Bot</h3><p>Automated trading powered by artificial intelligence</p><span style="font-size:0.7rem;">Coming soon</span></div>
+          <div class="soon-item"><h3>📊 Live Trading Room</h3><p>Trade alongside professional traders in real-time</p><span style="font-size:0.7rem;">coming soon</span></div>
+          <div class="soon-item"><h3>🎯 Daily Signal Alerts</h3><p>SMS and Telegram alerts for high-probability setups</p><span style="font-size:0.7rem;">Coming soon</span></div>
+          <div class="soon-item"><h3>📈 Prop Firm Funding</h3><p>Get funded up to $200,000 to trade</p><span style="font-size:0.7rem;">coming soon</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== RIGHT SIDEBAR - ADS ===== -->
+    <div class="right-sidebar">
+
+      <!-- ===== AD BANNER ===== -->
+      <div class="sidebar-card">
+        <div class="ad-banner">
+          <div class="ad-title">💰 GET FUNDED</div>
+          <div class="ad-sub">Up to $200,000 trading capital</div>
+          <a href="#" class="ad-btn">Apply Now</a>
+        </div>
+      </div>
+
+      <!-- ===== SIGNAL PERFORMANCE ===== -->
+      <div class="sidebar-card">
+        <h4>📊 Signal Performance</h4>
+        <div class="mini-review">
+          <span>★★★★★</span>
+          <p>"92% win rate this month! Best signals ever."</p>
+          <small>- John D.</small>
+        </div>
+        <div class="mini-review">
+          <span>★★★★★</span>
+          <p>"Made 45% profit in 2 weeks. Amazing!"</p>
+          <small>- Sarah K.</small>
+        </div>
+        <div class="mini-review">
+          <span>★★★★☆</span>
+          <p>"Great community and educational content."</p>
+          <small>- David L.</small>
+        </div>
+      </div>
+
+      <!-- ===== SPECIAL OFFER ===== -->
+      <div class="sidebar-card offer">
+        <span class="badge">🔥 LIMITED TIME</span>
+        <h4 style="border-left: none; color: var(--gold); font-size: 1.5rem;">50% OFF</h4>
+        <p>on all premium signals</p>
+        <p style="font-size: 0.7rem; color: #6a7894;">Use code: SUPER50</p>
+      </div>
+
+      <!-- ===== NEWSLETTER ===== -->
+      <div class="sidebar-card">
+        <h4>✉️ Free Daily Signals</h4>
+        <p style="font-size: 0.75rem; color: #b9c3db;">Get 1 free signal every morning</p>
+        <input type="email" placeholder="Enter your email" style="width:100%; padding:8px; border-radius:8px; border:1px solid #2a344d; background:#0a0f1c; color:white; font-size:0.7rem; margin:8px 0;">
+        <button style="width:100%; padding:8px; background:#38bdf8; border:none; border-radius:8px; font-weight:bold; font-size:0.7rem; cursor:pointer;">Subscribe</button>
+      </div>
+
+      <!-- ===== SOCIAL LINKS ===== -->
+      <div class="sidebar-card">
+        <h4>📱 Follow @super_trading</h4>
+        <div class="social-icons">
+          <a href="#">TELEGRAM</a>
+          <a href="#">YOUTUBE</a>
+          <a href="#">X</a>
+        </div>
+      </div>
+
+      <!-- ===== QUICK LINKS ===== -->
+      <div class="sidebar-card">
+        <h4>🔗 Quick Links</h4>
+        <ul>
+          <li><a href="#">Trading Signals</a></li>
+          <li><a href="#">Courses</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" id="footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">ST</div>
+        <span class="footer-logo-text">SUPER TRADING</span>
+      </div>
+      <div class="footer-contact-info">
+        <p>✉️ <a href="mailto:kevinshema15@gmail.com">kevinshema15@gmail.com</a></p>
+        <p>📞 <a href="tel:+250792377749">+250 792 377 749</a></p>
+        <a href="https://wa.me/250792377749" class="whatsapp-footer" target="_blank" rel="noopener noreferrer">💬 Join Trading Group</a>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="copyright">© 2026 SUPER TRADING — Powered by InzoziHub</div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===== LIGHTBOX ===== -->
+<div id="lightboxGlobal" class="lightbox-overlay" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <img id="lightboxImgSrc" src="" alt="full preview">
+    <h3 id="lightboxTitleText">Super Trading</h3>
+    <p id="lightboxDescText">Click anywhere outside to close</p>
   </div>
 </div>
 
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  const slideshowData = {
+    graphic: {
+      images: [
+        "https://placehold.co/900x500/2d3748/ffffff?text=Forex+Mastery+Course",
+        "https://placehold.co/900x500/1f2a44/facc15?text=Advanced+Strategies",
+        "https://placehold.co/900x500/111827/facc15?text=Risk+Management",
+        "https://placehold.co/900x500/1e293b/ffd966?text=Live+Trading"
+      ],
+      currentIndex: 0
+    },
+    web: {
+      images: [
+        "IMG_0019.PNG",
+        "IMG_0094.jpg",
+        "IMG_0020.PNG"
+      ],
+      currentIndex: 0
+    }
+  };
+
+  function initSlideshow(cardId, dataKey) {
+    const container = document.getElementById(`slideshow-${cardId}`);
+    if (!container) return;
+    const imgElement = container.querySelector('.slide-img');
+    const prevBtn = container.querySelector('.prev-btn');
+    const nextBtn = container.querySelector('.next-btn');
+    const dotsContainer = container.querySelector('.slide-dots');
+    const imagesArray = slideshowData[dataKey].images;
+    let currentIdx = slideshowData[dataKey].currentIndex;
+
+    function createDots() {
+      dotsContainer.innerHTML = '';
+      imagesArray.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === currentIdx) dot.classList.add('active');
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          currentIdx = idx;
+          updateSlide();
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function updateSlide() {
+      imgElement.src = imagesArray[currentIdx];
+      slideshowData[dataKey].currentIndex = currentIdx;
+      const dots = dotsContainer.querySelectorAll('.dot');
+      dots.forEach((dot, idx) => {
+        if (idx === currentIdx) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+    }
+
+    function nextSlide() {
+      currentIdx = (currentIdx + 1) % imagesArray.length;
+      updateSlide();
+    }
+    function prevSlide() {
+      currentIdx = (currentIdx - 1 + imagesArray.length) % imagesArray.length;
+      updateSlide();
+    }
+
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextSlide();
+    });
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevSlide();
+    });
+
+    imgElement.style.cursor = 'pointer';
+    imgElement.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const cardTitle = container.closest('.service-card')?.querySelector('.card-content h3')?.innerText || 'Super Trading';
+      openLightbox(imgElement.src, cardTitle, 'Explore this course in detail');
+    });
+
+    createDots();
+    updateSlide();
+  }
+
+  initSlideshow('graphic', 'graphic');
+  initSlideshow('web', 'web');
+
+  function openLightbox(imgUrl, title, desc) {
+    const modal = document.getElementById('lightboxGlobal');
+    document.getElementById('lightboxImgSrc').src = imgUrl;
+    document.getElementById('lightboxTitleText').innerText = title;
+    document.getElementById('lightboxDescText').innerText = desc;
+    modal.style.display = 'flex';
+  }
+  function closeLightbox() {
+    document.getElementById('lightboxGlobal').style.display = 'none';
+  }
+
+  document.querySelectorAll('.nav-links a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const targetElem = document.getElementById(targetId);
+      if(targetElem) {
+        targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
 </body>
 </html>
